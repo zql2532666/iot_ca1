@@ -213,9 +213,6 @@ function getHistoricalLightIntensity(){
 function updateGraphs(){
     var ldrdata = getHistoricalLightIntensity();
     var dht11Data = getHistoricalTempAndHumidity();
-    // renderTempChart(dht11Data.temperatures, dht11Data.datetime);
-    // renderHumidityChart(dht11Data.humidity, dht11Data.datetime)
-    // renderLDRChart(ldrdata.lightIntensity, ldrdata.datetime)
 }
 
 

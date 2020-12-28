@@ -2,6 +2,7 @@ var lightChart;
 var tempChart;
 var humidityChart;
 
+//fuck dora
 function renderLDRChart(lightIntensity, labels){
     var ctx3 = document.getElementById("chart3").getContext('2d');
     lightChart = new Chart(ctx3, {

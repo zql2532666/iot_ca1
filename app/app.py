@@ -23,6 +23,28 @@ def index():
     return render_template("index.html")
 
 
+@app.route('/api/led-status', methods=['GET'])
+def get_led_status():
+    if led.is_lit:
+        led_status = True
+    else:
+        led_status = False
+ 
+    return jsonify({'led_status': led_status}), 201
+
+
+@app.route('/api/led-on', methods=['GET'])
+def turn_on_led():
+    led.on()
+    return jsonify({'completed': True}), 201
+
+
+@app.route('/api/led-off', methods=['GET'])
+def turn_off_led():
+    led.off()
+    return jsonify({'completed': True}), 201
+
+
 @app.route('/api/latest-dht11-reading', methods=['GET'])
 def retrieve_latest_dht11_reading():
     # create the connection and cursor object for database access

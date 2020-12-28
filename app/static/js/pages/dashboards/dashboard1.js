@@ -1,3 +1,7 @@
+var lightChart;
+var tempChart;
+var humidityChart;
+
 function renderLDRChart(lightIntensity, labels){
     var ctx3 = document.getElementById("chart3").getContext('2d');
     lightChart = new Chart(ctx3, {
@@ -116,17 +120,45 @@ function renderCharts(){
 
 function updateCharts(){
 
-    $('#chart').remove();
-    $('#rchart2').remove();
-    $('#chart3').remove();
+    tempChart.destroy();
+    lightChart.destroy();
+    humidityChart.destroy();
 
-    $('#temp-chart').append('<canvas class="w-100" height="400" id="chart"></canvas>');
-    $('#humidity-chart').append('<canvas class="w-100" height="400" id="chart2"></canvas>');
-    $('#light-chart').append('<canvas class="w-100" height="400" id="chart3"></canvas>');
+    $("canvas#chart").remove();
+    $("canvas#chart2").remove();
+    $("canvas#chart3").remove();
+
+    $("div#temp-chart").append('<canvas class="w-100" height="400" id="chart"></canvas>');
+    $("div#humidity-chart").append('<canvas class="w-100" height="400" id="chart2"></canvas>');
+    $("div#light-chart").append('<canvas class="w-100" height="400" id="chart3"></canvas>');
 
     renderCharts();
 }
 
+
+function getLEDStatus(){
+    $.ajax({
+        url: "/api/led-status",
+        success: function(results){
+                    console.log(results);
+                    if (results['led_status'] == true){
+                        $('#led_status').html('LED is on');
+                    }
+                    else{
+                        $('#led_status').html('LED is off');
+                    }
+                },
+        type: 'GET'
+    });
+};
+
+
+$(document).ready(function() {
+    getLEDStatus();
+    renderCharts();
+    setInterval(getCurrentLDRData, 1000 * 5);
+    setInterval(getCurrentDHT11Data, 1000 * 5);
+});
 
 function getCurrentDHT11Data(){
     $.ajax({
@@ -150,30 +182,6 @@ function getCurrentLDRData(){
     });
 };
 
-function getLEDStatus(){
-    $.ajax({
-        url: "/api/led-status",
-        success: function(results){
-                    console.log(results);
-                    if (results['led_status'] == true){
-                        $('#led_status').html('LED is on');
-                    }
-                    else{
-                        $('#led_status').html('LED is off');
-                    }
-                },
-        type: 'GET'
-    });
-};
-
-
-$(document).ready(function() {
-    //getLEDStatus();
-    renderCharts();
-    setInterval(getCurrentLDRData, 1000 * 5);
-    setInterval(getCurrentDHT11Data, 1000 * 5);
-});
-
 
 function callLedOnAPI(){
     $.ajax({
@@ -194,6 +202,3 @@ function callLedOffAPI(){
         type: 'GET'
     });
 };
-
-
-// setInterval(updateGraphs, 1000 * 5);

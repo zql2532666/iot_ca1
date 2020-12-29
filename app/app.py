@@ -8,8 +8,8 @@ from time import sleep
 from gpiozero import MCP3008
 from datetime import datetime
 from time import sleep
-import threading
-from threading import Lock
+from threading import Thread
+import email_utils
 
 
 app = Flask(__name__,
@@ -18,21 +18,27 @@ app = Flask(__name__,
 
 
 RECORD_INTERVAL = 10
-PIN = 24   
+DHT11_PIN = 24   
 
 adc = MCP3008(channel=0)
-lock = Lock()
 
 LED_PIN = 13
 led = LED(LED_PIN)
+
+# variables for MYSQL Database connection 
 HOST = "localhost"
 USER = "root"
 PASSWORD = "root"
 DATABASE = "iot_ca1"
 
+latest_dht11_data = {}
+latest_ldr_data = {}
+
 
 def ldr_main():
+      global latest_ldr_data
       mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE)
+
       while True:
             try:
                   light_value = adc.value
@@ -42,7 +48,6 @@ def ldr_main():
                         rows_affected = database_utils.insert_ldr_data(mysql_connection, mysql_cursor, light_value, current_datetime)
                         print("Light sensor reading: {}".format(light_value))
                         print("{} rows updated in the database...\n".format(rows_affected))
-
                   sleep(RECORD_INTERVAL)
 
             except Exception as err:
@@ -50,18 +55,34 @@ def ldr_main():
 
 
 def dht11_main():
+      global latest_dht11_data
       mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE)
+      
       while True:
             try:
-                  humidity, temperature = Adafruit_DHT.read_retry(11, PIN)
+                  humidity, temperature = Adafruit_DHT.read_retry(11, DHT11_PIN)
                   print("Temp: {0} degree".format(temperature))
                   print("Humidity: {0} %".format(humidity))
 
                   if temperature and humidity:
                         # store the current temperature and humidity reading to database
                         current_datetime = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
+                        latest_dht11_data['temperature'] = temperature
+                        latest_dht11_data['humidity'] = humidity
+                        latest_dht11_data['datetime'] = current_datetime
+
+                        print(latest_dht11_data)
+
                         rows_affected = database_utils.insert_dht11_data(mysql_connection, mysql_cursor, temperature, humidity, current_datetime)
                         print("{} rows updated in the database...\n".format(rows_affected))
+
+                        # if temperature >= 30:
+                        #    email_utils.send_mail("""\
+                        #        Subject: High Temperature Reading
+
+                        #        High Temperature detected by DHT11 sensor. The temperature is {0}
+                        #    """.format(temperature))
 
                   sleep(RECORD_INTERVAL)
 
@@ -72,6 +93,10 @@ def dht11_main():
 @app.route('/')
 def index():
     return render_template("index.html")
+
+@app.route('/profile')
+def profile():
+    return render_template("profile.html")
 
 
 @app.route('/api/led-status', methods=['GET'])
@@ -98,14 +123,9 @@ def turn_off_led():
 
 @app.route('/api/latest-dht11-reading', methods=['GET'])
 def retrieve_latest_dht11_reading():
-    # create the connection and cursor object for database access
-    mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE)
-
-    # retrieve the latest dht11 data from database
-    latest_dht11_data = database_utils.retrieve_latest_dht11_data(mysql_connection, mysql_cursor)
 
     if latest_dht11_data:
-        return jsonify(latest_dht11_data), 201
+        return jsonify(latest_dht11_data.copy()), 201
     else:
         abort(400)
 
@@ -116,7 +136,7 @@ def retrieve_latest_ldr_reading():
     latest_ldr_data = database_utils.retrieve_latest_ldr_data(mysql_connection, mysql_cursor)
 
     if latest_ldr_data:
-        return jsonify(latest_ldr_data), 201
+        return jsonify(latest_ldr_data.copy()), 201
     else:
         abort(400)
 
@@ -149,11 +169,10 @@ def retrieve_ldr_data():
 if __name__ == "__main__":
 
     try:
-        t1 = threading.Thread(target=dht11_main, args=())
-        t2 = threading.Thread(target=ldr_main, args=())
+        t1 = Thread(target=dht11_main, args=())
+        # t2 = threading.Thread(target=ldr_main, args=())
         t1.start()
-        t2.start()
-
+        # t2.start()
         http_server = WSGIServer(('0.0.0.0', 5000), app)
         # app.debug = True
         print('Waiting for requests.. ')

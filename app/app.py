@@ -97,31 +97,21 @@ def dht11_main():
                   print(err)
 
 
-@app.before_request
-def before_request():
-    print("before_request() called")
-    g.user = None
 
-    if 'user_name' in session:
-        mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE)
-        user = database_utils.get_user_info_by_username(mysql_connection, mysql_cursor, session['user_name'])
-        print(user)
-        if user:
-            g.user = user
         
 
 @app.route('/')
 def index():
-    if not g.user:
-        redirect(url_for('login'))
+    if not "user_name" in session:
+        return render_template("login.html", error=None)
 
     return render_template("index.html")
 
 
 @app.route('/profile')
 def profile():
-    if not g.user:
-        redirect(url_for('login'))
+    if not "user_name" in session:
+        return render_template("login.html", error=None)
 
     return render_template("profile.html")
 
@@ -145,8 +135,8 @@ def login():
 
 @app.route('/api/led-status', methods=['GET'])
 def get_led_status():
-    if not g.user:
-        redirect(url_for('login'))
+    if not "user_name" in session:
+        return render_template("login.html", error=None)
 
     if led.is_lit:
         led_status = True
@@ -158,8 +148,8 @@ def get_led_status():
 
 @app.route('/api/led-on', methods=['GET'])
 def turn_on_led():
-    if not g.user:
-        redirect(url_for('login'))
+    if not "user_name" in session:
+        return render_template("login.html", error=None)
 
     led.on()
     return jsonify({'completed': True}), 201
@@ -167,8 +157,8 @@ def turn_on_led():
 
 @app.route('/api/led-off', methods=['GET'])
 def turn_off_led():
-    if not g.user:
-        redirect(url_for('login'))
+    if not "user_name" in session:
+        return render_template("login.html", error=None)
 
     led.off()
     return jsonify({'completed': True}), 201
@@ -176,8 +166,8 @@ def turn_off_led():
 
 @app.route('/api/latest-dht11-reading', methods=['GET'])
 def retrieve_latest_dht11_reading():
-    if not g.user:
-        redirect(url_for('login'))
+    if not "user_name" in session:
+        return render_template("login.html", error=None)
 
     if latest_dht11_data:
         return jsonify(latest_dht11_data.copy()), 201
@@ -187,8 +177,8 @@ def retrieve_latest_dht11_reading():
 
 @app.route('/api/latest-ldr-reading', methods=['GET'])
 def retrieve_latest_ldr_reading():
-    if not g.user:
-        redirect(url_for('login'))
+    if not "user_name" in session:
+        return render_template("login.html", error=None)
 
     mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE)  
     latest_ldr_data = database_utils.retrieve_latest_ldr_data(mysql_connection, mysql_cursor)
@@ -201,8 +191,8 @@ def retrieve_latest_ldr_reading():
 
 @app.route('/api/dht11-data', methods = ['GET'])
 def retrieve_dht11_data():
-    if not g.user:
-        redirect(url_for('login'))
+    if not "user_name" in session:
+        return render_template("login.html", error=None)
 
     mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE) 
     dht11_data = database_utils.retrieve_dht11_data(mysql_connection, mysql_cursor)
@@ -216,8 +206,8 @@ def retrieve_dht11_data():
 
 @app.route('/api/ldr-data', methods = ['GET'])
 def retrieve_ldr_data():
-    if not g.user:
-        redirect(url_for('login'))
+    if not "user_name" in session:
+        return render_template("login.html", error=None)
         
     mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE) 
     ldr_data = database_utils.retrieve_ldr_data(mysql_connection, mysql_cursor)

@@ -2,10 +2,7 @@ var lightChart;
 var tempChart;
 var humidityChart;
 
-<<<<<<< HEAD
-=======
-//fuck dora
->>>>>>> 02e4fccb186271197f9dc6618b8f3d24df4eadb2
+
 function renderLDRChart(lightIntensity, labels){
     var ctx3 = document.getElementById("chart3").getContext('2d');
     lightChart = new Chart(ctx3, {

@@ -99,11 +99,14 @@ def dht11_main():
 
 @app.before_request
 def before_request():
+    print("before_request() called")
+    g.user = None
+
     if 'user_name' in session:
         mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE)
         user = database_utils.get_user_info_by_username(mysql_connection, mysql_cursor, session['user_name'])
         g.user = user
-
+        
 
 @app.route('/')
 def index():

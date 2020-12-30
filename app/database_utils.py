@@ -126,8 +126,6 @@ def retrieve_ldr_data(connection, cursor):
         return None
 
     
-
-
 def retrieve_latest_ldr_data(connection, cursor):      
     query = "SELECT * FROM LDRdata ORDER BY id DESC LIMIT 1"
 
@@ -147,5 +145,26 @@ def retrieve_latest_ldr_data(connection, cursor):
         print(err)
         return None
 
-    
+
+def get_user_info_by_username(connection, cursor, username):
+    query = "SELECT * FROM user where username = %s"
+
+    try:
+        cursor.execute(query, (username,))
+        user_info = cursor.fetchone()
+        connection.close()
+
+        if user_info:
+            user_info_dict = {
+                "username": user_info[1],
+                "password": user_info[2]
+            }
+            
+            return user_info_dict
+        else:
+            return None
+
+    except Exception as err:
+        print(err)
+        return None
 

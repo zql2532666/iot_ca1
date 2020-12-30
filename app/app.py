@@ -24,6 +24,11 @@ DHT11_PIN = 24
 
 adc = MCP3008(channel=0)
 
+RECORD_INTERVAL = 10
+DHT11_PIN = 24   
+
+adc = MCP3008(channel=0)
+
 LED_PIN = 13
 led = LED(LED_PIN)
 
@@ -91,6 +96,7 @@ def dht11_main():
             except Exception as err:
                   print(err)
 
+<<<<<<< HEAD
 
 @app.before_request
 def before_request():
@@ -99,6 +105,8 @@ def before_request():
         user = database_utils.get_user_info_by_username(mysql_connection, mysql_cursor, session['user_name'])
         g.user = user
 
+=======
+>>>>>>> 02e4fccb186271197f9dc6618b8f3d24df4eadb2
 
 @app.route('/')
 def index():
@@ -106,6 +114,32 @@ def index():
         redirect(url_for('login'))
 
     return render_template("index.html")
+
+@app.route('/profile')
+def profile():
+    return render_template("profile.html")
+
+
+@app.route('/api/led-status', methods=['GET'])
+def get_led_status():
+    if led.is_lit:
+        led_status = True
+    else:
+        led_status = False
+ 
+    return jsonify({'led_status': led_status}), 201
+
+
+@app.route('/api/led-on', methods=['GET'])
+def turn_on_led():
+    led.on()
+    return jsonify({'completed': True}), 201
+
+
+@app.route('/api/led-off', methods=['GET'])
+def turn_off_led():
+    led.off()
+    return jsonify({'completed': True}), 201
 
 
 @app.route('/profile')
@@ -166,8 +200,11 @@ def turn_off_led():
 
 @app.route('/api/latest-dht11-reading', methods=['GET'])
 def retrieve_latest_dht11_reading():
+<<<<<<< HEAD
     if not g.user:
         redirect(url_for('login'))
+=======
+>>>>>>> 02e4fccb186271197f9dc6618b8f3d24df4eadb2
 
     if latest_dht11_data:
         return jsonify(latest_dht11_data.copy()), 201

@@ -120,7 +120,6 @@ def profile():
 def login():
     error = None
     if request.method == 'POST':
-        session.pop('user_name', None)
         mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE)
         user_info = database_utils.get_user_info_by_username(mysql_connection, mysql_cursor, request.form['username'])
 
@@ -131,6 +130,12 @@ def login():
             error = 'Invalid Credentials. Plase try again.'
 
     return render_template("login.html", error=error)
+
+
+@app.route('/logout')
+def logout():
+    session.pop("user_name", None)
+    return redirect(url_for('login'))
 
 
 @app.route('/api/led-status', methods=['GET'])

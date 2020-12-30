@@ -105,6 +105,7 @@ def before_request():
     if 'user_name' in session:
         mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE)
         user = database_utils.get_user_info_by_username(mysql_connection, mysql_cursor, session['user_name'])
+        print(user)
         if user:
             g.user = user
         

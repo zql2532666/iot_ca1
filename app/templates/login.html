@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>Login</title>
     <style>
         @import url('https://fonts.googleapis.com/css?family=Poppins');
 
@@ -282,7 +283,7 @@
           <!-- Login Form -->
           <form action="/login" method="POST">
             <input type="text" id="login" class="fadeIn second" name="username" placeholder="login" value="{{ request.form.username }}">
-            <input type="text" id="password" class="fadeIn third" name="password" placeholder="password" value="{{ request.form.password }}">
+            <input type="password" id="password" class="fadeIn third" name="password" placeholder="password" value="{{ request.form.password }}">
             <input type="submit" class="fadeIn fourth" value="Login">
           </form>
       

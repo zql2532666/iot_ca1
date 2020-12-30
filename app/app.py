@@ -18,12 +18,6 @@ app = Flask(__name__,
 
 app.secret_key = 'secretkey'
 
-
-RECORD_INTERVAL = 10
-DHT11_PIN = 24   
-
-adc = MCP3008(channel=0)
-
 RECORD_INTERVAL = 10
 DHT11_PIN = 24   
 
@@ -40,6 +34,8 @@ DATABASE = "iot_ca1"
 
 latest_dht11_data = {}
 latest_ldr_data = {}
+
+temp_notification_threshold = 30
 
 
 def ldr_main():
@@ -84,11 +80,11 @@ def dht11_main():
                         rows_affected = database_utils.insert_dht11_data(mysql_connection, mysql_cursor, temperature, humidity, current_datetime)
                         print("{} rows updated in the database...\n".format(rows_affected))
 
-                        # if temperature >= 30:
+                        # if temperature >= temp_notification_threshold:
                         #    email_utils.send_mail("""\
                         #        Subject: High Temperature Reading
 
-                        #        High Temperature detected by DHT11 sensor. The temperature is {0}
+                        #        High Temperature detected by DHT11 sensor. The temperature is {0}.
                         #    """.format(temperature))
 
                   sleep(RECORD_INTERVAL)

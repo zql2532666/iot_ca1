@@ -141,7 +141,6 @@ function getLEDStatus(){
     $.ajax({
         url: "/api/led-status",
         success: function(results){
-                    console.log(results);
                     if (results['led_status'] == true){
                         $('#led_status').html('LED is on');
                     }
@@ -166,6 +165,7 @@ function getCurrentDHT11Data(){
     $.ajax({
         url: "/api/latest-dht11-reading",
         success: function(results){
+                    console.log(results)
                     $('#temperature').html(results.temperature + " &deg;C");
                     $('#humidity').html(results.humidity + " %");
                 },

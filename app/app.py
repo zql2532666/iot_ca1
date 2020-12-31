@@ -197,6 +197,7 @@ def update_temperature_threshold():
     new_temp_threshold = request.json['new_temp_threshold']
     mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE)
     row_count = database_utils.update_temp_notification_threshold(mysql_connection, mysql_cursor, new_temp_threshold)
+    print("{} rows updated in the database..".format(row_count))
 
     if row_count == -1:
         return jsonify({"success": False}), 403
@@ -217,6 +218,7 @@ def update_humidity_threshold():
     new_humidity_threshold = request.json['new_humidity_threshold']
     mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE)
     row_count = database_utils.update_humidity_notification_threshold(mysql_connection, mysql_cursor, new_humidity_threshold)
+    print("{} rows updated in the database..".format(row_count))
 
     if row_count == -1:
         return jsonify({"success": False}), 403

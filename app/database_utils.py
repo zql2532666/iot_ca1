@@ -21,11 +21,10 @@ def insert_dht11_data(connection, cursor, temperature, humidity, date_time):
     try:
         cursor.execute(query, values)
         connection.commit()
+        connection.close()
+
     except mysql.Error as err:
          print(err)
-    except KeyboardInterrupt:
-         cursor.close()
-         connection.close()
     except:
         print("Error while inserting data...")
         print(sys.exc_info()[0])
@@ -88,11 +87,10 @@ def insert_ldr_data(connection, cursor, light_intensity, date_time):
     try:
         cursor.execute(query, values)
         connection.commit()
+        connection.close()
+
     except mysql.Error as err:
          print(err)
-    except KeyboardInterrupt:
-         cursor.close()
-         connection.close()
     except:
         print("Error while inserting data...")
         print(sys.exc_info()[0])
@@ -188,3 +186,39 @@ def get_notification_threshold(connection, cursor):
     except Exception as err:
         print(err)
         return None
+
+
+def update_temp_notification_threshold(connection, cursor, new_temp_threshold):
+    query = "update notification_threshold set temperature_threshold = %s where id = 1"
+
+    try:
+        cursor.execute(query, (new_temp_threshold,))
+        connection.commit()
+        connection.close()
+
+    except mysql.Error as err:
+         print(err)
+    except:
+        print("Error while inserting data...")
+        print(sys.exc_info()[0])
+        print(sys.exc_info()[1])
+
+    return cursor.rowcount
+
+
+def update_humidity_notification_threshold(connection, cursor, new_humidity_threshold):
+    query = "update notification_threshold set humidity_threshold = %s where id = 1"
+
+    try:
+        cursor.execute(query, (new_humidity_threshold,))
+        connection.commit()
+        connection.close()
+
+    except mysql.Error as err:
+         print(err)
+    except:
+        print("Error while inserting data...")
+        print(sys.exc_info()[0])
+        print(sys.exc_info()[1])
+
+    return cursor.rowcount

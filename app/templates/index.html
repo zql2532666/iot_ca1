@@ -133,8 +133,8 @@
                             <div class="card-body">
                                 <h4 class="card-title">Temperature Notification Threshold</h4>
                                 <div class="text-right">
-                                    <input type="text" id="temp_threshold" name="temp_threshold"> &deg;C
-                                    <button type="button" class="btn btn-info" style="margin-left: 0.5em;">Update</button>
+                                    <input type="number" step="0.01" id="temp_threshold" name="temp_threshold"> &deg;C
+                                    <button type="button" class="btn btn-info" style="margin-left: 0.5em;" onclick="callUpdateTempThresholdAPI()">Update</button>
                                 </div>
                             </div>
                         </div>
@@ -147,8 +147,8 @@
                             <div class="card-body">
                                 <h4 class="card-title">Humidity Notification Threshold</h4>
                                 <div class="text-right">
-                                    <input type="text" id="humidity_threshold" name="humidity_threshold"> %
-                                    <button type="button" class="btn btn-info" style="margin-left: 0.5em;">Update</button>
+                                    <input type="number" step="0.01" id="humidity_threshold" name="humidity_threshold"> %
+                                    <button type="button" class="btn btn-info" style="margin-left: 0.5em;" onclick="callUpdateHumidityThresholdAPI()">Update</button>
                                 </div>
                             </div>
                         </div>

@@ -50,6 +50,7 @@ def ldr_main():
                         rows_affected = database_utils.insert_ldr_data(mysql_connection, mysql_cursor, light_value, current_datetime)
                         print("Light sensor reading: {}".format(light_value))
                         print("{} rows updated in the database...\n".format(rows_affected))
+                        
                   sleep(RECORD_INTERVAL)
 
             except Exception as err:
@@ -59,7 +60,8 @@ def ldr_main():
 def dht11_main():
       global latest_dht11_data
       mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE)
-      
+      notification_threshold = database_utils.get_notification_threshold(mysql_connection, mysql_cursor)
+
       while True:
             try:
                   humidity, temperature = Adafruit_DHT.read_retry(11, DHT11_PIN)
@@ -79,7 +81,7 @@ def dht11_main():
                         rows_affected = database_utils.insert_dht11_data(mysql_connection, mysql_cursor, temperature, humidity, current_datetime)
                         print("{} rows updated in the database...\n".format(rows_affected))
 
-                        # if temperature >= temp_notification_threshold:
+                        # if temperature >= notification_threshold['temperature_threshold']:
                         #    email_utils.send_mail("""\
                         #        Subject: High Temperature Reading
 
@@ -163,6 +165,7 @@ def turn_off_led():
     led.off()
     return jsonify({'completed': True}), 201
 
+
 @app.route('/api/notification-threshold', methods=['GET'])
 def retrieve_notification_threshold():
     if not "user_name" in session:
@@ -179,13 +182,39 @@ def retrieve_notification_threshold():
 
 @app.route('/api/update-temperature-threshold', methods=['POST'])
 def update_temperature_threshold():
-    pass
+    if not "user_name" in session:
+        abort(403)
+    
+    if not request.json or not 'new_temp_threshold' in request.json:
+        abort(403)
+
+    new_temp_threshold = request.json['new_temp_threshold']
+    mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE)
+    row_count = database_utils.update_temp_notification_threshold(mysql_connection, mysql_cursor, new_temp_threshold)
+
+    if row_count:
+        return jsonify({"success": True}), 201
+    else:
+        return jsonify({"success": False}), 403
 
 
 @app.route('/api/update-humidity-threshold', methods=['POST'])
 def update_humidity_threshold():
-    pass
-    
+    if not "user_name" in session:
+        abort(403)
+
+    if not request.json or not 'new_humidity_threshold' in request.json:
+        abort(403)
+
+    new_humidity_threshold = request.json['new_humidity_threshold']
+    mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE)
+    row_count = database_utils.update_humidity_notification_threshold(mysql_connection, mysql_cursor, new_humidity_threshold)
+
+    if row_count:
+        return jsonify({"success": True}), 201
+    else:
+        return jsonify({"success": False}), 403
+
 
 @app.route('/api/latest-dht11-reading', methods=['GET'])
 def retrieve_latest_dht11_reading():

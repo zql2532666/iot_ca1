@@ -220,9 +220,55 @@ function getNotificationThreshold(){
 
 
 function callUpdateTempThresholdAPI(){
+    var newTempThreshold = $('#temp_threshold').val();
 
+    if (newTempThreshold.length == 0){
+        alert("Please enter a value.")
+    }
+    else{
+        $.ajax({
+            url: "/api/update-temperature-threshold",
+            success: function(results){
+                    alert("update successful");
+                    },
+
+            error: function(){
+                    alert("An error occured when updaing threshold");
+                    },
+                
+
+            data: {
+                'new_temp_threshold': newTempThreshold
+            },
+            
+            type: 'POST'
+        });
+    }   
 }
 
+
 function callUpdateHumidityThresholdAPI(){
-    
+    var newHumidityThreshold = $('#humidity_threshold').val();
+
+    if (newHumidityThreshold.length == 0){
+        alert("Please enter a value.")
+    }
+    else{
+        $.ajax({
+            url: "/api/update-humidity-threshold",
+            success: function(results){
+                    alert("update successful");
+                    },
+
+            error: function(){
+                    alert("An error occured when updaing threshold");
+                },
+            
+            data: {
+                'new_humidity_threshold': newHumidityThreshold
+            },
+            
+            type: 'POST'
+        });
+    }
 }

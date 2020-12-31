@@ -198,10 +198,10 @@ def update_temperature_threshold():
     mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE)
     row_count = database_utils.update_temp_notification_threshold(mysql_connection, mysql_cursor, new_temp_threshold)
 
-    if row_count:
-        return jsonify({"success": True}), 201
-    else:
+    if row_count == -1:
         return jsonify({"success": False}), 403
+    else:
+        return jsonify({"success": True}), 201
 
 
 @app.route('/api/update-humidity-threshold', methods=['POST'])
@@ -210,7 +210,7 @@ def update_humidity_threshold():
         abort(403)
 
     print(request.json)
-    
+
     if not request.json or not 'new_humidity_threshold' in request.json:
         abort(403)
 
@@ -218,10 +218,10 @@ def update_humidity_threshold():
     mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE)
     row_count = database_utils.update_humidity_notification_threshold(mysql_connection, mysql_cursor, new_humidity_threshold)
 
-    if row_count:
-        return jsonify({"success": True}), 201
-    else:
+    if row_count == -1:
         return jsonify({"success": False}), 403
+    else:
+        return jsonify({"success": True}), 201
 
 
 @app.route('/api/latest-dht11-reading', methods=['GET'])

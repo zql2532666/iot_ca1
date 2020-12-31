@@ -21,7 +21,6 @@ def insert_dht11_data(connection, cursor, temperature, humidity, date_time):
     try:
         cursor.execute(query, values)
         connection.commit()
-        connection.close()
 
     except mysql.Error as err:
          print(err)
@@ -33,13 +32,12 @@ def insert_dht11_data(connection, cursor, temperature, humidity, date_time):
     return cursor.rowcount
 
 
-def retrieve_dht11_data(connection, cursor):     
+def retrieve_dht11_data(cursor):     
     query = "SELECT * FROM dht11data ORDER BY id DESC LIMIT 10"
 
     try:
         cursor.execute(query)
         dht11_data = cursor.fetchall()
-        connection.close()
         dht11_data_list = []
 
         for row in dht11_data[::-1]:
@@ -87,7 +85,6 @@ def insert_ldr_data(connection, cursor, light_intensity, date_time):
     try:
         cursor.execute(query, values)
         connection.commit()
-        connection.close()
 
     except mysql.Error as err:
          print(err)
@@ -99,13 +96,12 @@ def insert_ldr_data(connection, cursor, light_intensity, date_time):
     return cursor.rowcount
 
 
-def retrieve_ldr_data(connection, cursor):     
+def retrieve_ldr_data(cursor):     
     query = "SELECT * FROM LDRdata ORDER BY id DESC LIMIT 10"
 
     try:
         cursor.execute(query)
         ldr_data = cursor.fetchall()
-        connection.close()
 
         ldr_data_list = []
 
@@ -122,13 +118,12 @@ def retrieve_ldr_data(connection, cursor):
         return None
 
     
-def retrieve_latest_ldr_data(connection, cursor):      
+def retrieve_latest_ldr_data(cursor):      
     query = "SELECT * FROM LDRdata ORDER BY id DESC LIMIT 1"
 
     try:
         cursor.execute(query)
         ldr_data = cursor.fetchall()
-        connection.close()
 
         ldr_data_dict = {
             "light_intensity": float(ldr_data[0][1]),
@@ -142,13 +137,12 @@ def retrieve_latest_ldr_data(connection, cursor):
         return None
 
 
-def get_user_info_by_username(connection, cursor, username):
+def get_user_info_by_username(cursor, username):
     query = "SELECT * FROM user where username = %s"
 
     try:
         cursor.execute(query, (username,))
         user_info = cursor.fetchone()
-        connection.close()
 
         if user_info:
             user_info_dict = {
@@ -165,13 +159,12 @@ def get_user_info_by_username(connection, cursor, username):
         return None
 
 
-def get_notification_threshold(connection, cursor):
+def get_notification_threshold(cursor):
     query = "SELECT * FROM notification_threshold"
 
     try:
         cursor.execute(query)
         threshold_values = cursor.fetchone()
-        connection.close()
 
         if threshold_values:
             threshold_value_dict = {
@@ -194,7 +187,6 @@ def update_temp_notification_threshold(connection, cursor, new_temp_threshold):
     try:
         cursor.execute(query, (new_temp_threshold,))
         connection.commit()
-        connection.close()
 
     except mysql.Error as err:
          print(err)
@@ -212,7 +204,6 @@ def update_humidity_notification_threshold(connection, cursor, new_humidity_thre
     try:
         cursor.execute(query, (new_humidity_threshold,))
         connection.commit()
-        connection.close()
 
     except mysql.Error as err:
          print(err)

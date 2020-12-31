@@ -50,17 +50,18 @@ def ldr_main():
                         rows_affected = database_utils.insert_ldr_data(mysql_connection, mysql_cursor, light_value, current_datetime)
                         print("Light sensor reading: {}".format(light_value))
                         print("{} rows updated in the database...\n".format(rows_affected))
-                        
+
                   sleep(RECORD_INTERVAL)
 
             except Exception as err:
+                  mysql_connection.close()
                   print(err)
 
 
 def dht11_main():
       global latest_dht11_data
       mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE)
-      notification_threshold = database_utils.get_notification_threshold(mysql_connection, mysql_cursor)
+      # notification_threshold = database_utils.get_notification_threshold(mysql_connection, mysql_cursor)
 
       while True:
             try:
@@ -91,6 +92,7 @@ def dht11_main():
                   sleep(RECORD_INTERVAL)
 
             except Exception as err:
+                  mysql_connection.close()
                   print(err)
 
 
@@ -118,7 +120,8 @@ def login():
     error = None
     if request.method == 'POST':
         mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE)
-        user_info = database_utils.get_user_info_by_username(mysql_connection, mysql_cursor, request.form['username'])
+        user_info = database_utils.get_user_info_by_username(mysql_cursor, request.form['username'])
+        mysql_connection.close()
 
         if user_info and request.form['password'] == user_info['password']:
             session['user_name'] = user_info['username']
@@ -172,7 +175,8 @@ def retrieve_notification_threshold():
         abort(403)
 
     mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE)
-    notification_threshold = database_utils.get_notification_threshold(mysql_connection, mysql_cursor)
+    notification_threshold = database_utils.get_notification_threshold(mysql_cursor)
+    mysql_connection.close()
 
     if notification_threshold:
         return jsonify(notification_threshold), 201
@@ -233,7 +237,8 @@ def retrieve_latest_ldr_reading():
         abort(403)
 
     mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE)  
-    latest_ldr_data = database_utils.retrieve_latest_ldr_data(mysql_connection, mysql_cursor)
+    latest_ldr_data = database_utils.retrieve_latest_ldr_data(mysql_cursor)
+    mysql_connection.close()
 
     if latest_ldr_data:
         return jsonify(latest_ldr_data.copy()), 201
@@ -247,7 +252,8 @@ def retrieve_dht11_data():
         abort(403)
 
     mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE) 
-    dht11_data = database_utils.retrieve_dht11_data(mysql_connection, mysql_cursor)
+    dht11_data = database_utils.retrieve_dht11_data(mysql_cursor)
+    mysql_connection.close()
 
     if dht11_data:
         return jsonify(dht11_data), 201
@@ -262,7 +268,8 @@ def retrieve_ldr_data():
         abort(403)
         
     mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE) 
-    ldr_data = database_utils.retrieve_ldr_data(mysql_connection, mysql_cursor)
+    ldr_data = database_utils.retrieve_ldr_data(mysql_cursor)
+    mysql_connection.close()
 
     if ldr_data:
         return jsonify(ldr_data), 201

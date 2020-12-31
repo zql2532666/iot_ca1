@@ -228,6 +228,12 @@ function callUpdateTempThresholdAPI(){
     else{
         $.ajax({
             url: "/api/update-temperature-threshold",
+
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            
             success: function(results){
                     alert("update successful");
                     },
@@ -258,6 +264,12 @@ function callUpdateHumidityThresholdAPI(){
     else{
         $.ajax({
             url: "/api/update-humidity-threshold",
+
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+
             success: function(results){
                     alert("update successful");
                     },

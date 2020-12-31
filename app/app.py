@@ -82,11 +82,13 @@ def dht11_main():
                         rows_affected = database_utils.insert_dht11_data(mysql_connection, mysql_cursor, temperature, humidity, current_datetime)
                         print("{} rows updated in the database...\n".format(rows_affected))
 
-                        # if temperature >= notification_threshold['temperature_threshold']:
+                        # if temperature >= notification_threshold['temperature_threshold'] or humidity >= notification_threshold['humidity_threshold']:
                         #    email_utils.send_mail("""\
-                        #        Subject: High Temperature Reading
+                        #        Subject: Unusual DHT11 Reading
 
-                        #        High Temperature detected by DHT11 sensor. The temperature is {0}.
+                        #        Unusual reading from the DHT11 sensor:
+                        #           Temperature:
+                        #           Humidity: 
                         #    """.format(temperature))
 
                   sleep(RECORD_INTERVAL)

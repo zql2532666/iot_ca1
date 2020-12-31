@@ -237,9 +237,11 @@ function callUpdateTempThresholdAPI(){
                     },
                 
 
-            data: {
+            data: JSON.stringify({
                 'new_temp_threshold': newTempThreshold
-            },
+            }),
+
+            dataType: "json",
             
             type: 'POST'
         });
@@ -264,10 +266,12 @@ function callUpdateHumidityThresholdAPI(){
                     alert("An error occured when updaing threshold");
                 },
             
-            data: {
+            data: JSON.stringify({
                 'new_humidity_threshold': newHumidityThreshold
-            },
+            }),
             
+            dataType: "json",
+
             type: 'POST'
         });
     }

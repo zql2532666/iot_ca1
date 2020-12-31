@@ -81,7 +81,6 @@ def retrieve_latest_dht11_data(connection, cursor):
         return None
 
     
-
 def insert_ldr_data(connection, cursor, light_intensity, date_time):       
     query = "INSERT INTO LDRdata (light_intensity, datetime) VALUES (%s, %s)"
     values = (light_intensity, date_time)
@@ -98,7 +97,6 @@ def insert_ldr_data(connection, cursor, light_intensity, date_time):
         print("Error while inserting data...")
         print(sys.exc_info()[0])
         print(sys.exc_info()[1])
-
 
     return cursor.rowcount
 
@@ -168,3 +166,25 @@ def get_user_info_by_username(connection, cursor, username):
         print(err)
         return None
 
+
+def get_dht11_notification_threshold(connection, cursor):
+    query = "SELECT * FROM notification_threshold"
+
+    try:
+        cursor.execute(query)
+        threshold_values = cursor.fetchone()
+        connection.close()
+
+        if threshold_values:
+            threshold_value_dict = {
+                "temperature_threshold": threshold_values[0],
+                "humidity_threshold": threshold_values[1]
+            }
+
+            return threshold_value_dict
+        else:
+            return None
+
+    except Exception as err:
+        print(err)
+        return None

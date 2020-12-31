@@ -35,7 +35,6 @@ DATABASE = "iot_ca1"
 latest_dht11_data = {}
 latest_ldr_data = {}
 
-temp_notification_threshold = 30
 
 
 def ldr_main():
@@ -137,7 +136,7 @@ def logout():
 @app.route('/api/led-status', methods=['GET'])
 def get_led_status():
     if not "user_name" in session:
-        return render_template("login.html", error=None)
+        abort(403)
 
     if led.is_lit:
         led_status = True
@@ -150,7 +149,7 @@ def get_led_status():
 @app.route('/api/led-on', methods=['GET'])
 def turn_on_led():
     if not "user_name" in session:
-        return render_template("login.html", error=None)
+        abort(403)
 
     led.on()
     return jsonify({'completed': True}), 201
@@ -159,7 +158,7 @@ def turn_on_led():
 @app.route('/api/led-off', methods=['GET'])
 def turn_off_led():
     if not "user_name" in session:
-        return render_template("login.html", error=None)
+        abort(403)
 
     led.off()
     return jsonify({'completed': True}), 201
@@ -168,7 +167,7 @@ def turn_off_led():
 @app.route('/api/latest-dht11-reading', methods=['GET'])
 def retrieve_latest_dht11_reading():
     if not "user_name" in session:
-        return render_template("login.html", error=None)
+        abort(403)
 
     if latest_dht11_data:
         return jsonify(latest_dht11_data.copy()), 201
@@ -179,7 +178,7 @@ def retrieve_latest_dht11_reading():
 @app.route('/api/latest-ldr-reading', methods=['GET'])
 def retrieve_latest_ldr_reading():
     if not "user_name" in session:
-        return render_template("login.html", error=None)
+        abort(403)
 
     mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE)  
     latest_ldr_data = database_utils.retrieve_latest_ldr_data(mysql_connection, mysql_cursor)
@@ -193,7 +192,7 @@ def retrieve_latest_ldr_reading():
 @app.route('/api/dht11-data', methods = ['GET'])
 def retrieve_dht11_data():
     if not "user_name" in session:
-        return render_template("login.html", error=None)
+        abort(403)
 
     mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE) 
     dht11_data = database_utils.retrieve_dht11_data(mysql_connection, mysql_cursor)
@@ -208,7 +207,7 @@ def retrieve_dht11_data():
 @app.route('/api/ldr-data', methods = ['GET'])
 def retrieve_ldr_data():
     if not "user_name" in session:
-        return render_template("login.html", error=None)
+        abort(403)
         
     mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE) 
     ldr_data = database_utils.retrieve_ldr_data(mysql_connection, mysql_cursor)

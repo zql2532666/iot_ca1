@@ -163,7 +163,7 @@ def turn_off_led():
     led.off()
     return jsonify({'completed': True}), 201
 
-@app.route('/api/notification-threshold', method=['GET'])
+@app.route('/api/notification-threshold', methods=['GET'])
 def retrieve_notification_threshold():
     if not "user_name" in session:
         abort(403)
@@ -177,7 +177,7 @@ def retrieve_notification_threshold():
         abort(403)
 
 
-@app.route('/api/update-temperature-threshold', method=['POST'])
+@app.route('/api/update-temperature-threshold', methods=['POST'])
 def update_temperature_threshold():
     pass
 

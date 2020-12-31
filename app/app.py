@@ -182,7 +182,7 @@ def update_temperature_threshold():
     pass
 
 
-@app.route('/api/update-humidity-threshold', method=['POST'])
+@app.route('/api/update-humidity-threshold', methods=['POST'])
 def update_humidity_threshold():
     pass
     
@@ -212,7 +212,7 @@ def retrieve_latest_ldr_reading():
         abort(403)
 
 
-@app.route('/api/dht11-data', methods = ['GET'])
+@app.route('/api/dht11-data', methods=['GET'])
 def retrieve_dht11_data():
     if not "user_name" in session:
         abort(403)
@@ -227,7 +227,7 @@ def retrieve_dht11_data():
 
     
 
-@app.route('/api/ldr-data', methods = ['GET'])
+@app.route('/api/ldr-data', methods=['GET'])
 def retrieve_ldr_data():
     if not "user_name" in session:
         abort(403)

@@ -1,4 +1,3 @@
-from app.database_utils import get_notification_threshold
 from flask import Flask, render_template, request, jsonify, abort, redirect, url_for, flash, session, g
 from gevent.pywsgi import WSGIServer
 from gpiozero import LED

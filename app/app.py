@@ -140,7 +140,8 @@ def login():
 
 @app.route('/logout')
 def logout():
-    session.pop("user_name", None)
+    # session.pop("user_name", None)
+    session.destroy()
     return redirect(url_for('login'))
 
 

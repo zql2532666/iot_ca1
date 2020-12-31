@@ -188,6 +188,8 @@ def retrieve_notification_threshold():
 def update_temperature_threshold():
     if not "user_name" in session:
         abort(403)
+
+    print(request.json)
     
     if not request.json or not 'new_temp_threshold' in request.json:
         abort(403)
@@ -207,6 +209,8 @@ def update_humidity_threshold():
     if not "user_name" in session:
         abort(403)
 
+    print(request.json)
+    
     if not request.json or not 'new_humidity_threshold' in request.json:
         abort(403)
 

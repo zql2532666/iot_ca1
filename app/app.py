@@ -140,9 +140,10 @@ def login():
 
 @app.route('/logout')
 def logout():
-    # session.pop("user_name", None)
-    session.destroy()
-    return redirect(url_for('login'))
+    session.pop("user_name", None)
+    resp = app.make_response(render_template('login.html'))
+    resp.set_cookie("user_name", expires=0)
+    return resp
 
 
 @app.route('/api/led-status', methods=['GET'])

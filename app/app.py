@@ -1,3 +1,4 @@
+from app.database_utils import get_notification_threshold
 from flask import Flask, render_template, request, jsonify, abort, redirect, url_for, flash, session, g
 from gevent.pywsgi import WSGIServer
 from gpiozero import LED
@@ -163,6 +164,29 @@ def turn_off_led():
     led.off()
     return jsonify({'completed': True}), 201
 
+@app.route('/api/notification-threshold', method=['GET'])
+def retrieve_notification_threshold():
+    if not "user_name" in session:
+        abort(403)
+
+    mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE)
+    notification_threshold = database_utils.get_notification_threshold(mysql_connection, mysql_cursor)
+
+    if notification_threshold:
+        return jsonify(notification_threshold), 201
+    else:
+        abort(403)
+
+
+@app.route('/api/update-temperature-threshold', method=['POST'])
+def update_temperature_threshold():
+    pass
+
+
+@app.route('/api/update-humidity-threshold', method=['POST'])
+def update_humidity_threshold():
+    pass
+    
 
 @app.route('/api/latest-dht11-reading', methods=['GET'])
 def retrieve_latest_dht11_reading():

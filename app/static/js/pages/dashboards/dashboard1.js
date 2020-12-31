@@ -203,3 +203,25 @@ function callLedOffAPI(){
         type: 'GET'
     });
 };
+
+
+function getNotificationThreshold(){
+    $.ajax({
+        url: "/api/notification-threshold",
+        success: function(results){
+                    $('#temp_threshold').val(results.temperature_threshold);
+                    $('#humidity_threshold').val(results.humidity_threshold);
+                },
+        
+        type: 'GET'
+    });
+}
+
+
+function callUpdateTempThresholdAPI(){
+
+}
+
+function callUpdateHumidityThresholdAPI(){
+    
+}

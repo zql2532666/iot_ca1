@@ -167,7 +167,7 @@ def get_user_info_by_username(connection, cursor, username):
         return None
 
 
-def get_dht11_notification_threshold(connection, cursor):
+def get_notification_threshold(connection, cursor):
     query = "SELECT * FROM notification_threshold"
 
     try:

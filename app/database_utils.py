@@ -177,8 +177,8 @@ def get_notification_threshold(connection, cursor):
 
         if threshold_values:
             threshold_value_dict = {
-                "temperature_threshold": threshold_values[0],
-                "humidity_threshold": threshold_values[1]
+                "temperature_threshold": float(threshold_values[0]),
+                "humidity_threshold": float(threshold_values[1])
             }
 
             return threshold_value_dict

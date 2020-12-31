@@ -156,6 +156,7 @@ function getLEDStatus(){
 
 $(document).ready(function() {
     getLEDStatus();
+    getNotificationThreshold()
     renderCharts();
     setInterval(getCurrentLDRData, 1000 * 5);
     setInterval(getCurrentDHT11Data, 1000 * 5);

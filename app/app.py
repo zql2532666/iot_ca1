@@ -10,6 +10,7 @@ from datetime import datetime
 from time import sleep
 from threading import Thread
 import email_utils
+from datetime import timedelta
 
 
 app = Flask(__name__,
@@ -86,10 +87,10 @@ def dht11_main():
                         #    email_utils.send_mail("""\
                         #        Subject: Unusual DHT11 Reading
 
-                        #        Unusual reading from the DHT11 sensor:
+                        #        Unusual reading from DHT11 sensor:
                         #           Temperature:
                         #           Humidity: 
-                        #    """.format(temperature))
+                        #    """.format(temperature, humidity))
 
                   sleep(RECORD_INTERVAL)
 
@@ -98,7 +99,10 @@ def dht11_main():
                   print(err)
 
 
-
+@app.before_request
+def before_request():
+    session.permanent = True
+    app.permanent_session_lifetime = timedelta(minutes=5)
         
 
 @app.route('/')

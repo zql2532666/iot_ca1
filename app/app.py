@@ -304,9 +304,9 @@ if __name__ == "__main__":
 
     try:
         t1 = Thread(target=dht11_main, args=())
-        # t2 = threading.Thread(target=ldr_main, args=())
+        t2 = Thread(target=ldr_main, args=())
         t1.start()
-        # t2.start()
+        t2.start()
         http_server = WSGIServer(('0.0.0.0', 5000), app)
         # app.debug = True
         print('Waiting for requests.. ')

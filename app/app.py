@@ -252,6 +252,26 @@ def update_humidity_threshold():
         return jsonify({"success": True}), 201
 
 
+@app.route('/api/update-profile', methods=['POST'])
+def update_profile():
+    if not "user_name" in session:
+        abort(403)
+
+    username = request.form['username']
+    email = request.form['email']
+    password = request.form['password']
+
+    mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE)
+    row_count = database_utils.update_user_profile(mysql_connection, mysql_cursor, username, email, password)
+
+    print("{} rows updated in the database..".format(row_count))
+
+    if row_count == -1:
+        return jsonify({"success": False}), 403
+    else:
+        return jsonify({"success": True}), 201
+
+
 @app.route('/api/latest-dht11-reading', methods=['GET'])
 def retrieve_latest_dht11_reading():
     if not "user_name" in session:

@@ -216,5 +216,18 @@ def update_humidity_notification_threshold(connection, cursor, new_humidity_thre
     return cursor.rowcount
 
 
-def update_user_profile(connection, cursor, username=None, email=None, password=None):
-    pass
+def update_user_profile(connection, cursor, username, email, password):
+    query = "update user set username = %s, set password = %s, set email = %s where id = 1"
+
+    try:
+        cursor.execute(query, (username,email,password))
+        connection.commit()
+
+    except mysql.Error as err:
+         print(err)
+    except:
+        print("Error while inserting data...")
+        print(sys.exc_info()[0])
+        print(sys.exc_info()[1])
+
+    return cursor.rowcount

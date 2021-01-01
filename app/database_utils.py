@@ -137,17 +137,18 @@ def retrieve_latest_ldr_data(cursor):
         return None
 
 
-def get_user_info_by_username(cursor, username):
-    query = "SELECT * FROM user where username = %s"
+def get_user_info(cursor):
+    query = "SELECT * FROM user"
 
     try:
-        cursor.execute(query, (username,))
+        cursor.execute(query)
         user_info = cursor.fetchone()
 
         if user_info:
             user_info_dict = {
                 "username": user_info[1],
-                "password": user_info[2]
+                "password": user_info[2],
+                "email": user_info[3]
             }
             
             return user_info_dict

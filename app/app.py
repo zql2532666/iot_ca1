@@ -6,7 +6,6 @@ import mysql.connector as mysql
 import Adafruit_DHT
 from time import sleep
 import time
-from gpiozero import MCP3008
 from datetime import datetime
 from time import sleep
 from threading import Thread
@@ -55,7 +54,6 @@ def ldr_main():
                         print("Light sensor reading: {}".format(s[0]))
                         print("{} rows updated in the database...\n".format(rows_affected))
 
-                  # sleep(RECORD_INTERVAL)
 
             except Exception as err:
                   mysql_connection.close()
@@ -125,7 +123,7 @@ def profile():
         return render_template("login.html", error=None)
 
     mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE)
-    user_info = database_utils.get_user_info_by_username(mysql_cursor, session['user_name'])
+    user_info = database_utils.get_user_info(mysql_cursor)
     mysql_connection.close()
 
     return render_template("profile.html", user_info=user_info)
@@ -136,7 +134,7 @@ def login():
     error = None
     if request.method == 'POST':
         mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE)
-        user_info = database_utils.get_user_info_by_username(mysql_cursor, request.form['username'])
+        user_info = database_utils.get_user_info(mysql_cursor)
         mysql_connection.close()
 
         if user_info and request.form['password'] == user_info['password']:

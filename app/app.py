@@ -24,7 +24,6 @@ app.secret_key = 'secretkey'
 RECORD_INTERVAL = 10
 DHT11_PIN = 24   
 
-
 LED_PIN = 13
 led = LED(LED_PIN)
 
@@ -66,7 +65,6 @@ def ldr_main():
 def dht11_main():
       global latest_dht11_data
       mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE)
-      notification_threshold = database_utils.get_notification_threshold(mysql_cursor)
       old_time = 0
 
       while True:
@@ -74,6 +72,7 @@ def dht11_main():
                   humidity, temperature = Adafruit_DHT.read_retry(11, DHT11_PIN)
                   print("Temp: {0} degree".format(temperature))
                   print("Humidity: {0} %".format(humidity))
+                  notification_threshold = database_utils.get_notification_threshold(mysql_cursor)
 
                   if temperature and humidity:
                         current_datetime = datetime.now().strftime("%d/%m/%Y %H:%M:%S")

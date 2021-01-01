@@ -266,7 +266,7 @@ def update_profile():
 
     print("{} rows updated in the database..".format(row_count))
 
-    return redirect(url_for('/profile'))
+    return redirect(url_for('profile'))
 
 
 

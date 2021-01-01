@@ -23,7 +23,7 @@ app.secret_key = 'secretkey'
 RECORD_INTERVAL = 10
 DHT11_PIN = 24   
 
-LED_PIN = 13
+LED_PIN = 19
 led = LED(LED_PIN)
 
 # variables for MYSQL Database connection 

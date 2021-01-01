@@ -13,6 +13,7 @@ PASSWORD = "1234qwer$#@!"
 mysql_connection, mysql_cursor = database_utils.get_mysql_connection(app.HOST, app.USER, app.PASSWORD, app.DATABASE)
 receiver_email = database_utils.get_user_info(mysql_cursor)['email']
 mysql_connection.close()
+print(receiver_email)
 
 def send_mail(message):
     context = ssl.create_default_context()

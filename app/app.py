@@ -87,13 +87,14 @@ def dht11_main():
                         if temperature >= notification_threshold['temperature_threshold'] or humidity >= notification_threshold['humidity_threshold']:
                             current_time = time.time()
                             if current_time - old_time >= NOTIFICATION_COOLDOWN_TIME:
+                                user_email = database_utils.get_user_info(mysql_cursor)
                                 email_utils.send_mail("""\
                                 Subject: Unusual DHT11 Reading
 
                                 Unusual value is detected by the DHT11 sensor:
                                 Detected Temperature: {0}
                                 Detected Humidity: {1}
-                                """.format(temperature, humidity))
+                                """.format(temperature, humidity), user_email)
                                 old_time = current_time
 
                   sleep(RECORD_INTERVAL)

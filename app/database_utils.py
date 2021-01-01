@@ -217,10 +217,10 @@ def update_humidity_notification_threshold(connection, cursor, new_humidity_thre
 
 
 def update_user_profile(connection, cursor, username, email, password):
-    query = "update user set username = %s, set password = %s, set email = %s where id = 1"
+    query = "update user set username = %s, password = %s, email = %s where id = 1"
 
     try:
-        cursor.execute(query, (username,email,password))
+        cursor.execute(query, (username,password,email))
         connection.commit()
 
     except mysql.Error as err:

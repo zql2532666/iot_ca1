@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, abort, redirect, url_for, flash, session, g
+from flask import Flask, render_template, request, jsonify, abort, redirect, url_for, session
 from gevent.pywsgi import WSGIServer
 from gpiozero import LED
 import database_utils
@@ -266,10 +266,8 @@ def update_profile():
 
     print("{} rows updated in the database..".format(row_count))
 
-    if row_count == -1:
-        return jsonify({"success": False}), 403
-    else:
-        return jsonify({"success": True}), 201
+    return redirect(url_for('/profile'))
+
 
 
 @app.route('/api/latest-dht11-reading', methods=['GET'])

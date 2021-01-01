@@ -98,9 +98,8 @@
                         <!-- User profile and search -->
                         <!-- ============================================================== -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false"><img src="{{ url_for('static', filename='images/users/1.jpg') }}"
-                                    alt="user" class="profile-pic mr-2">Hi, </a>
+                            <a class="nav-link dropdown-toggle waves-effect waves-dark" href="/profile" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">Hi, {{ session['user_name'] }}</a>
                         </li>
                     </ul>
                 </div>
@@ -127,10 +126,13 @@
                                 <i class="mr-3 fa fa-user" aria-hidden="true"></i><span
                                     class="hide-menu">Profile</span></a>
                         </li>
+
+                        <!--
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/" aria-expanded="false"><i class="mr-3 fa fa-table"
                                     aria-hidden="true"></i><span class="hide-menu">Table</span></a></li>
-
+                        -->
+                        
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                         href="/logout" aria-expanded="false">
                                         <i class="mr-3  fas fa-power-off" aria-hidden="true"></i><span class="hide-menu">Logout</span></a>

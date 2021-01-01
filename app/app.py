@@ -91,12 +91,12 @@ def dht11_main():
                             current_time = time.time()
                             if current_time - old_time >= NOTIFICATION_COOLDOWN_TIME:
                                 email_utils.send_mail("""\
-                                    Subject: Unusual DHT11 Reading
+                                Subject: Unusual DHT11 Reading
 
-                                    Unusual value is detected by the DHT11 sensor:
-                                    Detected Temperature: {0}
-                                    Detected Humidity: {1}
-                                """.format(temperature, temperature))
+                                Unusual value is detected by the DHT11 sensor:
+                                Detected Temperature: {0}
+                                Detected Humidity: {1}
+                                """.format(temperature, humidity))
                                 old_time = current_time
 
                   sleep(RECORD_INTERVAL)
@@ -125,7 +125,11 @@ def profile():
     if not "user_name" in session:
         return render_template("login.html", error=None)
 
-    return render_template("profile.html")
+    mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE)
+    user_info = database_utils.get_user_info_by_username(mysql_cursor, session['user_name'])
+    mysql_connection.close()
+
+    return render_template("profile.html", user_info=user_info)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -308,7 +312,7 @@ if __name__ == "__main__":
         t1.start()
         t2.start()
         http_server = WSGIServer(('0.0.0.0', 5000), app)
-        # app.debug = True
+        app.debug = True
         print('Waiting for requests.. ')
         http_server.serve_forever()
 

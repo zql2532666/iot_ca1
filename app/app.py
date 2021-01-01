@@ -5,12 +5,14 @@ import database_utils
 import mysql.connector as mysql
 import Adafruit_DHT
 from time import sleep
+import time
 from gpiozero import MCP3008
 from datetime import datetime
 from time import sleep
 from threading import Thread
 import email_utils
 from datetime import timedelta
+import serial
 
 
 app = Flask(__name__,
@@ -22,7 +24,6 @@ app.secret_key = 'secretkey'
 RECORD_INTERVAL = 10
 DHT11_PIN = 24   
 
-adc = MCP3008(channel=0)
 
 LED_PIN = 13
 led = LED(LED_PIN)
@@ -36,23 +37,26 @@ DATABASE = "iot_ca1"
 latest_dht11_data = {}
 latest_ldr_data = {}
 
+NOTIFICATION_COOLDOWN_TIME = 300
 
 
 def ldr_main():
       global latest_ldr_data
       mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE)
+      ser = serial.Serial('/dev/ttyUSB0', 9600)
+      s = [0]
 
       while True:
             try:
-                  light_value = adc.value
+                  s[0] = str(int(ser.readline(),16))
 
-                  if light_value:
+                  if s[0]:
                         current_datetime = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-                        rows_affected = database_utils.insert_ldr_data(mysql_connection, mysql_cursor, light_value, current_datetime)
-                        print("Light sensor reading: {}".format(light_value))
+                        rows_affected = database_utils.insert_ldr_data(mysql_connection, mysql_cursor, s[0], current_datetime)
+                        print("Light sensor reading: {}".format(s[0]))
                         print("{} rows updated in the database...\n".format(rows_affected))
 
-                  sleep(RECORD_INTERVAL)
+                  # sleep(RECORD_INTERVAL)
 
             except Exception as err:
                   mysql_connection.close()
@@ -62,7 +66,8 @@ def ldr_main():
 def dht11_main():
       global latest_dht11_data
       mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE)
-      # notification_threshold = database_utils.get_notification_threshold(mysql_connection, mysql_cursor)
+      notification_threshold = database_utils.get_notification_threshold(mysql_cursor)
+      old_time = 0
 
       while True:
             try:
@@ -71,7 +76,6 @@ def dht11_main():
                   print("Humidity: {0} %".format(humidity))
 
                   if temperature and humidity:
-                        # store the current temperature and humidity reading to database
                         current_datetime = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
                         latest_dht11_data['temperature'] = temperature
@@ -83,14 +87,17 @@ def dht11_main():
                         rows_affected = database_utils.insert_dht11_data(mysql_connection, mysql_cursor, temperature, humidity, current_datetime)
                         print("{} rows updated in the database...\n".format(rows_affected))
 
-                        # if temperature >= notification_threshold['temperature_threshold'] or humidity >= notification_threshold['humidity_threshold']:
-                        #    email_utils.send_mail("""\
-                        #        Subject: Unusual DHT11 Reading
+                        if temperature >= notification_threshold['temperature_threshold'] or humidity >= notification_threshold['humidity_threshold']:
+                            current_time = time.time()
+                            if current_time - old_time >= NOTIFICATION_COOLDOWN_TIME:
+                                email_utils.send_mail("""\
+                                    Subject: Unusual DHT11 Reading
 
-                        #        Unusual reading from DHT11 sensor:
-                        #           Temperature:
-                        #           Humidity: 
-                        #    """.format(temperature, humidity))
+                                    Unusual value is detected by the DHT11 sensor:
+                                    Detected Temperature: {0}
+                                    Detected Humidity: {1}
+                                """.format(temperature, temperature))
+                                old_time = current_time
 
                   sleep(RECORD_INTERVAL)
 

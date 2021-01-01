@@ -1,4 +1,5 @@
 import smtplib, ssl
+from time import sleep
 
 
 SMTP_SERVER = "smtp.gmail.com"
@@ -18,11 +19,7 @@ def send_mail(message):
         server.login(SENDER_EMAIL, PASSWORD)
         server.sendmail(SENDER_EMAIL, RECEVIER_EMAIL, message)
 
-
-send_mail("""\
-Subject: TEST
-
-This message is for testing.""")
+    
 
 
 

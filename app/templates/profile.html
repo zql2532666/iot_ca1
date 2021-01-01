@@ -53,14 +53,14 @@
                                     <div class="form-group">
                                         <label class="col-md-12 mb-0">Username</label>
                                         <div class="col-md-12">
-                                            <input type="text" value=""
+                                            <input type="text" value="{{ user_info['username'] }}"
                                                 class="form-control pl-0 form-control-line">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="example-email" class="col-md-12">Email</label>
                                         <div class="col-md-12">
-                                            <input type="email" value=""
+                                            <input type="email" value="{{ user_info['email'] }}"
                                                 class="form-control pl-0 form-control-line" name="example-email"
                                                 id="example-email">
                                         </div>
@@ -68,7 +68,7 @@
                                     <div class="form-group">
                                         <label class="col-md-12 mb-0">Password</label>
                                         <div class="col-md-12">
-                                            <input type="password" 
+                                            <input type="password" value="{{ user_info['password'] }}"
                                                 class="form-control pl-0 form-control-line">
                                         </div>
                                     </div>

@@ -118,6 +118,15 @@ def index():
     return render_template("index.html")
 
 
+@app.route('/dashboard')
+def dashboard():
+    if not "user_name" in session:
+        return render_template("login.html", error=None)
+
+    return render_template("index.html")
+
+
+
 @app.route('/profile')
 def profile():
     if not "user_name" in session:
@@ -140,7 +149,7 @@ def login():
 
         if user_info and request.form['password'] == user_info['password']:
             session['user_name'] = user_info['username']
-            return redirect(url_for('profile'))
+            return redirect(url_for('dashboard'))
         else:
             error = 'Invalid Credentials. Plase try again.'
 
@@ -305,14 +314,18 @@ def retrieve_ldr_data():
 if __name__ == "__main__":
 
     try:
-        t1 = Thread(target=dht11_main, args=())
-        t2 = Thread(target=ldr_main, args=())
-        t1.start()
-        t2.start()
+        dht11_thread = Thread(target=dht11_main, args=())
+        ldr_thread = Thread(target=ldr_main, args=())
+        dht11_thread.start()
+        ldr_thread.start()
         http_server = WSGIServer(('0.0.0.0', 5000), app)
         app.debug = True
         print('Waiting for requests.. ')
         http_server.serve_forever()
+
+    except KeyboardInterrupt:
+        dht11_thread.stop()
+        ldr_thread.stop()
 
     except Exception as err:
         print(err)

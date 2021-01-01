@@ -214,3 +214,7 @@ def update_humidity_notification_threshold(connection, cursor, new_humidity_thre
         print(sys.exc_info()[1])
 
     return cursor.rowcount
+
+
+def update_user_profile(connection, cursor, username=None, email=None, password=None):
+    pass

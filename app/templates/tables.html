@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <!--Datatables-->
+    <link rel="stylesheet" type="text/css" href="../static/plugins/multicheck/multicheck.css">
+    <link href="../static/plugins/Datatables/dataTables.bootstrap4.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Light</h5>
+                        <div class="table-responsive">
+                            <table id="lightTable" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Light Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <button onclick="window.tempHumidityTable.ajax.reload(null, false)" type="button"
+                            class="btn btn-outline-primary" style="margin-top: 10px">Refresh Table</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Temp & Humidity</h5>
+                        <div class="table-responsive">
+                            <table id="tempTable" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Temperature</th>
+                                        <th>Humidity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <button onclick="window.lightTable.ajax.reload(null, false);" type="button"
+                            class="btn btn-outline-primary" style="margin-top: 10px">Refresh Table</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="../static/plugins/DataTables/datatables.min.js"></script>
+    <script src="../static/plugins/multicheck/datatable-checkbox-init.js"></script>
+    <script src="../static/plugins/multicheck/jquery.multicheck.js"></script>
+
+
+    <script>
+        function generateTempHumidityTable() {
+            window.tempHumidityTable = $('#tempTable').DataTable({
+                'responsive': true,
+                "autoWidth": false,
+                "ajax": "/api/dht11-data",
+                'columns': [
+                    { data: "date" },
+                    { data: "temperature" },
+                    { data: "humidity" },
+                ]
+            });
+        };
+
+        function generateLightTable() {
+            window.lightTable = $('#lightTable').DataTable({
+                'responsive': true,
+                "autoWidth": false,
+                "ajax": "/api/ldr-data",
+                'columns': [
+                    { data: "date" },
+                    { data: "light" },
+                ]
+            });
+        }
+
+
+        generateTempHumidityTable();
+        generateLightTable();
+
+
+        setInterval(function () {
+            window.tempHumidityTable.ajax.reload(null, false);
+        }, 5000);
+        setInterval(function () {
+            window.lightTable.ajax.reload(null, false);
+        }, 5000);
+
+    </script>
+
+{% endblock %}

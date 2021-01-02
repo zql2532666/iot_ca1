@@ -126,6 +126,13 @@ def dashboard():
     return render_template("index.html")
 
 
+@app.route('/tables')
+def tables():
+    if not "user_name" in session:
+        return render_template("login.html", error=None)
+
+    return render_template("tables.html")
+
 
 @app.route('/profile')
 def profile():

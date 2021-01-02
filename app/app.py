@@ -313,7 +313,7 @@ def retrieve_dht11_data():
     mysql_connection.close()
 
     if dht11_data:
-        return jsonify(dht11_data), 201
+        return jsonify(dht11_data[-10:]), 201
     else:
         abort(403)
 
@@ -346,7 +346,7 @@ def retrieve_ldr_data():
     mysql_connection.close()
 
     if ldr_data:
-        return jsonify(ldr_data), 201
+        return jsonify(ldr_data[-10:]), 201
     else:
         abort(403)
 

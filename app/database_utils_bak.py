@@ -33,14 +33,14 @@ def insert_dht11_data(connection, cursor, temperature, humidity, date_time):
 
 
 def retrieve_dht11_data(cursor):     
-    query = "SELECT * FROM dht11data"
+    query = "SELECT * FROM dht11data ORDER BY id DESC LIMIT 10"
 
     try:
         cursor.execute(query)
         dht11_data = cursor.fetchall()
         dht11_data_list = []
 
-        for row in dht11_data:
+        for row in dht11_data[::-1]:
             dht11_data_list.append({
                 "temperature": float(row[1]),
                 "humidity": float(row[2]),
@@ -97,7 +97,7 @@ def insert_ldr_data(connection, cursor, light_intensity, date_time):
 
 
 def retrieve_ldr_data(cursor):     
-    query = "SELECT * FROM LDRdata"
+    query = "SELECT * FROM LDRdata ORDER BY id DESC LIMIT 10"
 
     try:
         cursor.execute(query)
@@ -105,7 +105,7 @@ def retrieve_ldr_data(cursor):
 
         ldr_data_list = []
 
-        for row in ldr_data:
+        for row in ldr_data[::-1]:
             ldr_data_list.append({
             "light_intensity": float(row[1]),
             "datetime": row[2]

@@ -317,8 +317,25 @@ def retrieve_dht11_data():
     else:
         abort(403)
 
-    
 
+@app.route('/api/dht11-data-datatables', methods=['GET'])
+def retrieve_dht11_data_for_datatables():
+    if not "user_name" in session:
+        abort(403)
+
+    mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE) 
+    dht11_data = database_utils.retrieve_dht11_data(mysql_cursor)
+    mysql_connection.close()
+
+    data_dict = Dict()
+    data_dict['data'] = dht11_data
+
+    if dht11_data:
+        return jsonify(data_dict), 201
+    else:
+        abort(403)
+
+    
 @app.route('/api/ldr-data', methods=['GET'])
 def retrieve_ldr_data():
     if not "user_name" in session:
@@ -333,6 +350,23 @@ def retrieve_ldr_data():
     else:
         abort(403)
 
+
+@app.route('/api/ldr-data-datatables', methods=['GET'])
+def retrieve_ldr_data_for_datatables():
+    if not "user_name" in session:
+        abort(403)
+        
+    mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE) 
+    ldr_data = database_utils.retrieve_ldr_data(mysql_cursor)
+    mysql_connection.close()
+
+    data_dict = Dict()
+    data_dict['data'] = ldr_data
+
+    if ldr_data:
+        return jsonify(data_dict), 201
+    else:
+        abort(403)
     
 
 

@@ -349,8 +349,8 @@ if __name__ == "__main__":
         http_server.serve_forever()
 
     except KeyboardInterrupt:
-        dht11_thread.stop()
-        ldr_thread.stop()
+        print("Ctrl + C pressed")
+        exit(0)
 
     except Exception as err:
         print(err)

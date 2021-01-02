@@ -79,8 +79,6 @@ def dht11_main():
                         latest_dht11_data['humidity'] = humidity
                         latest_dht11_data['datetime'] = current_datetime
 
-                        print(latest_dht11_data)
-
                         rows_affected = database_utils.insert_dht11_data(mysql_connection, mysql_cursor, temperature, humidity, current_datetime)
                         print("{} rows updated in the database...\n".format(rows_affected))
 

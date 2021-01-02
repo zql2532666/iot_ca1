@@ -11,7 +11,7 @@ function renderLDRChart(lightIntensity, labels){
             labels: labels,
             datasets: [
                 {
-                    label: 'Light Intensity',
+                    label: 'LDR Output',
                     data: lightIntensity,
                     borderColor: '#c56015',
                     borderWidth: 1,

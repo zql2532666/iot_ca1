@@ -94,7 +94,7 @@
             window.tempHumidityTable = $('#tempTable').DataTable({
                 'responsive': true,
                 "autoWidth": false,
-                "ajax": "/api/dht11-data",
+                "ajax": "/api/dht11-data-datatables",
                 'columns': [
                     { data: "datetime" },
                     { data: "temperature" },
@@ -107,7 +107,7 @@
             window.lightTable = $('#lightTable').DataTable({
                 'responsive': true,
                 "autoWidth": false,
-                "ajax": "/api/ldr-data",
+                "ajax": "/api/ldr-data-datatables",
                 'columns': [
                     { data: "datetime" },
                     { data: "light_intensity" },

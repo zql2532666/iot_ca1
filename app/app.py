@@ -327,7 +327,7 @@ def retrieve_dht11_data_for_datatables():
     dht11_data = database_utils.retrieve_dht11_data(mysql_cursor)
     mysql_connection.close()
 
-    data_dict = Dict()
+    data_dict = dict()
     data_dict['data'] = dht11_data
 
     if dht11_data:
@@ -360,7 +360,7 @@ def retrieve_ldr_data_for_datatables():
     ldr_data = database_utils.retrieve_ldr_data(mysql_cursor)
     mysql_connection.close()
 
-    data_dict = Dict()
+    data_dict = dict()
     data_dict['data'] = ldr_data
 
     if ldr_data:

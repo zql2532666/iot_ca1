@@ -50,6 +50,10 @@ def ldr_main():
 
                   if s[0]:
                         current_datetime = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
+                        latest_ldr_data['light_intensity'] = s[0]
+                        latest_ldr_data['datetime'] = current_datetime
+                        
                         rows_affected = database_utils.insert_ldr_data(mysql_connection, mysql_cursor, s[0], current_datetime)
                         print("Light sensor reading: {}".format(s[0]))
                         print("{} rows updated in the database...\n".format(rows_affected))

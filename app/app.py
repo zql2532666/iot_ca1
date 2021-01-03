@@ -287,10 +287,6 @@ def retrieve_latest_ldr_reading():
     if not "user_name" in session:
         abort(403)
 
-    mysql_connection, mysql_cursor = database_utils.get_mysql_connection(HOST, USER, PASSWORD, DATABASE)  
-    latest_ldr_data = database_utils.retrieve_latest_ldr_data(mysql_cursor)
-    mysql_connection.close()
-
     if latest_ldr_data:
         return jsonify(latest_ldr_data.copy()), 201
     else:

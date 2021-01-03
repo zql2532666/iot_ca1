@@ -92,7 +92,10 @@ def dht11_main():
                                 user_info = database_utils.get_user_info(mysql_cursor)
                                 print(user_info)
                                 user_email = user_info['email']
-                                email_utils.send_mail("Subject: Unusual DHT11 Reading\nUnusual value is detected by the DHT11 sensor:\nDetected Temperature: {0} Degree\nDetected Humidity: {1} %".format(temperature, humidity), user_email)
+                                email_utils.send_mail(''' \
+                                Subject: Unusual DHT11 Reading 
+                                
+                                Unusual value is detected by the DHT11 sensor:\nDetected Temperature: {0} Degree\nDetected Humidity: {1} %'''.format(temperature, humidity), user_email)
                                 old_time = current_time
 
                   sleep(RECORD_INTERVAL)

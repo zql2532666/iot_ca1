@@ -117,25 +117,6 @@ def retrieve_ldr_data(cursor):
         print(err)
         return None
 
-    
-# def retrieve_latest_ldr_data(cursor):      
-#    query = "SELECT * FROM LDRdata ORDER BY id DESC LIMIT 1"
-
-#    try:
-#        cursor.execute(query)
-#        ldr_data = cursor.fetchall()
-
-#        ldr_data_dict = {
-#            "light_intensity": float(ldr_data[0][1]),
-#            "datetime": ldr_data[0][2]
-#        }
-#        print(ldr_data_dict)
-#        return ldr_data_dict
-
-#    except Exception as err:
-#        print(err)
-#        return None
-
 
 def get_user_info(cursor):
     query = "SELECT * FROM user"

@@ -53,7 +53,7 @@ def ldr_main():
 
                         latest_ldr_data['light_intensity'] = s[0]
                         latest_ldr_data['datetime'] = current_datetime
-                        
+
                         rows_affected = database_utils.insert_ldr_data(mysql_connection, mysql_cursor, s[0], current_datetime)
                         print("Light sensor reading: {}".format(s[0]))
                         print("{} rows updated in the database...\n".format(rows_affected))
@@ -271,7 +271,7 @@ def update_profile():
 
     print("{} rows updated in the database..".format(row_count))
 
-    return redirect(url_for('profile'))
+    return redirect(url_for('logout'))
 
 
 
